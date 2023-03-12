@@ -1,0 +1,13 @@
+docs
+
+# Compiled binary addons (http://nodejs.org/api/addons.html)
+build/Release
+
+# Dependency directories
+node_modules/
+package-lock.json
+
+# Enviroment files
+config.env
+
+
