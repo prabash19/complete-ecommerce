@@ -9,7 +9,7 @@ exports.getAllProducts = catchAsyncError(async (req, res) => {
   });
 });
 
-exports.getProductById = async (req, res) => {
+exports.getProductById = catchAsyncError(async (req, res) => {
   const product = await Product.findById(req.params.id);
   if (!product) {
     return next(new ErrorHandler("product not found", 404));
@@ -19,18 +19,18 @@ exports.getProductById = async (req, res) => {
     product,
   });
   next();
-};
+});
 
-exports.createProduct = async (req, res, next) => {
+exports.createProduct = catchAsyncError(async (req, res, next) => {
   const product = await Product.create(req.body);
   res.status(200).json({
     message: "successfully added product",
     product,
   });
   next();
-};
+});
 
-exports.updateProduct = async (req, res, next) => {
+exports.updateProduct = catchAsyncError(async (req, res, next) => {
   let product = await Product.findById(req.params.id);
   if (!product) {
     return next(new ErrorHandler("product not found", 404));
@@ -43,9 +43,9 @@ exports.updateProduct = async (req, res, next) => {
     product,
   });
   next();
-};
+});
 
-exports.deleteProduct = async (req, res, next) => {
+exports.deleteProduct = catchAsyncError(async (req, res, next) => {
   let product = await Product.findById(req.params.id);
   if (!product) {
     return next(new ErrorHandler("product not found", 404));
@@ -55,4 +55,4 @@ exports.deleteProduct = async (req, res, next) => {
     message: " deleted completed successfully",
   });
   next();
-};
+});
