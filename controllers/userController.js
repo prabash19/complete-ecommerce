@@ -1,9 +1,11 @@
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncError = require("../middleware/catchAsyncError");
 const User = require("../models/userModels");
-
+const bcrypt = require("bcryptjs");
+const createToken = require("../utils/createToken");
 exports.registerUser = catchAsyncError(async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email } = req.body;
+  const password = await bcrypt.hash(req.body.password, 10);
   const user = await User.create({
     name,
     email,
@@ -13,8 +15,10 @@ exports.registerUser = catchAsyncError(async (req, res) => {
       url: "this is a url",
     },
   });
+  const token = createToken(user._id);
   res.status(201).json({
     success: true,
-    user,
+    message: "Successfully Registered",
+    token,
   });
 });
