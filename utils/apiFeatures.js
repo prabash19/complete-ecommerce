@@ -18,15 +18,18 @@ class ApiFeatures {
 
   filter() {
     const queryStringCopy = { ...this.queryString };
-    // creating an object with all fields removed from queryStringCopy except "category"
-    const queryCatagory = {};
-    Object.keys(queryStringCopy).forEach((k) => {
-      if (k === "category") {
-        queryCatagory[k] = queryStringCopy[k];
-      }
+    // removing fields in query that is not for filter
+    const removeFields = ["keyword", "limit", "page"];
+    removeFields.forEach((el) => {
+      delete queryStringCopy[el];
     });
-    // creating an object with all fields removed from queryStringCopy except "category"
-    this.query = this.query.find(queryCatagory);
+    // removing fields in query that is not for filter
+
+    // creating filter for price and rating
+    let queryStr = JSON.stringify(queryStringCopy);
+    queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, (key) => `$${key}`);
+
+    this.query = this.query.find(JSON.parse(queryStr));
     return this;
   }
 }
