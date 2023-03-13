@@ -18,6 +18,13 @@ module.exports = (err, req, res, next) => {
     err = new ErrorHandler(message, 400);
   }
 
+  // Mongo Validation Error
+  if (err.code === 11000) {
+    const errors = Object.values(err.errors).map((el) => el.message);
+    const message = `Invalid Data Entered, ${errors.join(". ")}`;
+    err = new ErrorHandler(message, 400);
+  }
+
   res.status(err.statusCode).json({
     success: "false",
     message: err.message,

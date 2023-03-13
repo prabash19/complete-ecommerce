@@ -34,11 +34,12 @@ const ProductSchema = new mongoose.Schema({
   },
   stock: {
     type: Number,
-    maxLength: [4, "Please enter less than 9999"],
+    max: [9999, "Please enter less than 9999"],
     default: 1,
   },
   numberOfReviews: {
     type: Number,
+    min: [10, "Please enter a non-negative number of reviews"],
     default: 0,
   },
   reviews: [
