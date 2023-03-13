@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const errorMiddleware = require("./middleware/error");
+const ErrorHandler = require("./utils/errorHandler");
+
 dotenv.config({ path: "./config.env" });
 
 const app = express();
@@ -28,5 +30,12 @@ async function connectDB() {
 }
 
 app.use("/api/v1", route);
+
+// Error handler for invalid routes
+app.all("*", (req, res, next) => {
+  next(new ErrorHandler("Cannot find requested route", 404));
+});
+
 app.use(errorMiddleware);
+
 module.exports = app;
