@@ -1,5 +1,6 @@
 const express = require("express");
-const route = require("./routes/productRoute");
+const product = require("./routes/productRoute");
+const user = require("./routes/userRoute");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
@@ -29,7 +30,8 @@ async function connectDB() {
   }
 }
 
-app.use("/api/v1", route);
+app.use("/api/v1", product);
+app.use("/api/v1/user", user);
 
 // Error handler for invalid routes
 app.all("*", (req, res, next) => {
