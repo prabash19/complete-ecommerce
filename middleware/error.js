@@ -10,6 +10,14 @@ module.exports = (err, req, res, next) => {
     err = new ErrorHandler(message, 400);
   }
 
+  // Mongo Dublicate Field Error
+  if (err.code === 11000) {
+    const field = Object.keys(err.keyValue)[0];
+    const value = err.keyValue[field];
+    const message = `Duplicate field value: ${value}. Please use another value for ${field}.`;
+    err = new ErrorHandler(message, 400);
+  }
+
   res.status(err.statusCode).json({
     success: "false",
     message: err.message,
