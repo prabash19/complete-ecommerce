@@ -3,7 +3,9 @@ const route = require("./routes/productRoute");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const errorMiddleware = require("./middleware/error");
 dotenv.config({ path: "./config.env" });
+
 const app = express();
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -26,5 +28,5 @@ async function connectDB() {
 }
 
 app.use("/api/v1", route);
-
+app.use(errorMiddleware);
 module.exports = app;
