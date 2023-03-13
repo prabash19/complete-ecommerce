@@ -1,5 +1,4 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const connectDB = require("./utils/connectDB");
 const bodyParser = require("body-parser");
@@ -18,6 +17,7 @@ app.use(bodyParser.json());
 const DB_PASSWORD = process.env.DATABASE_PASSWORD;
 const DB = process.env.DATABASE.replace("<PASSWORD>", DB_PASSWORD);
 connectDB(DB);
+
 app.use("/api/v1", product);
 app.use("/api/v1/user", user);
 

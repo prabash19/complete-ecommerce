@@ -38,8 +38,8 @@ exports.loginUser = catchAsyncError(async (req, res, next) => {
   if (!isCorrectPassword) {
     return next(new ErrorHandler("Incorrect Email or Password", 400));
   } else {
-    const token = createToken(user._id);
-    res.status(201).json({
+    const { token, options } = createToken(user._id);
+    res.status(201).cookie("token", token, options).json({
       message: "logged in Successfully",
       token,
     });
