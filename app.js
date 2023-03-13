@@ -1,11 +1,12 @@
 const express = require("express");
-const product = require("./routes/productRoute");
-const user = require("./routes/userRoute");
-const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const connectDB = require("./utils/connectDB");
+const bodyParser = require("body-parser");
 const errorMiddleware = require("./middleware/error");
 const ErrorHandler = require("./utils/errorHandler");
+const product = require("./routes/productRoute");
+const user = require("./routes/userRoute");
 
 dotenv.config({ path: "./config.env" });
 
@@ -16,20 +17,7 @@ app.use(bodyParser.json());
 
 const DB_PASSWORD = process.env.DATABASE_PASSWORD;
 const DB = process.env.DATABASE.replace("<PASSWORD>", DB_PASSWORD);
-
-mongoose.set("strictQuery", true);
-connectDB();
-async function connectDB() {
-  try {
-    await mongoose.connect(DB, {
-      useNewUrlParser: true,
-    });
-    console.log("DB connected");
-  } catch (err) {
-    console.log("DB error: ", err);
-  }
-}
-
+connectDB(DB);
 app.use("/api/v1", product);
 app.use("/api/v1/user", user);
 

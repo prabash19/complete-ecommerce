@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
     required: [true, "Please enter your Password"],
     max: [30, "Please enter name less than 30 characters"],
     min: [8, "Please enter password more than 7 characters"],
-    // select: false,
+    select: false,
   },
   avatar: {
     public_id: {
