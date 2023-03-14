@@ -17,11 +17,10 @@ exports.registerUser = catchAsyncError(async (req, res) => {
       url: "this is a url",
     },
   });
-  const token = createToken(user._id);
-  res.status(201).json({
+  const { token, options } = createToken(user._id);
+  res.status(201).cookie("token", token, options).json({
     success: true,
     message: "Successfully Registered",
-    token,
   });
 });
 
@@ -41,7 +40,6 @@ exports.loginUser = catchAsyncError(async (req, res, next) => {
     const { token, options } = createToken(user._id);
     res.status(201).cookie("token", token, options).json({
       message: "logged in Successfully",
-      token,
     });
   }
 });

@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./utils/connectDB");
+const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const errorMiddleware = require("./middleware/error");
 const ErrorHandler = require("./utils/errorHandler");
@@ -13,9 +14,12 @@ const app = express();
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cookieParser());
 
-const DB_PASSWORD = process.env.DATABASE_PASSWORD;
-const DB = process.env.DATABASE.replace("<PASSWORD>", DB_PASSWORD);
+const DB = process.env.DATABASE.replace(
+  "<PASSWORD>",
+  process.env.DATABASE_PASSWORD
+);
 connectDB(DB);
 
 app.use("/api/v1", product);
