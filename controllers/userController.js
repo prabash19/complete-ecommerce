@@ -21,6 +21,7 @@ exports.registerUser = catchAsyncError(async (req, res) => {
   res.status(201).cookie("token", token, options).json({
     success: true,
     message: "Successfully Registered",
+    user,
   });
 });
 
@@ -30,6 +31,7 @@ exports.loginUser = catchAsyncError(async (req, res, next) => {
     return next(new ErrorHandler("Please enter email and password", 400));
   }
   const user = await User.findOne({ email }).select("+password");
+  console.log("user is", user);
   if (!user) {
     return next(new ErrorHandler("Invaid email or password", 400));
   }
@@ -42,4 +44,15 @@ exports.loginUser = catchAsyncError(async (req, res, next) => {
       message: "logged in Successfully",
     });
   }
+});
+
+exports.logOut = catchAsyncError(async (req, res, next) => {
+  res.cookie("token", null, {
+    expires: new Date(Date.now()),
+    httpOnly: true,
+  });
+  res.status(201).json({
+    success: "true",
+    message: "logged out",
+  });
 });

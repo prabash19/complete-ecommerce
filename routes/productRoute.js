@@ -6,12 +6,15 @@ const {
   deleteProduct,
   getProductById,
 } = require("../controllers/productController");
-const { isAuthenticatedUser } = require("../middleware/authUserRole");
+const {
+  isAuthenticatedUser,
+  authorizedRoles,
+} = require("../middleware/authUserRole");
 const router = express.Router();
 
 router
   .route("/products")
-  .get(isAuthenticatedUser, getAllProducts)
+  .get(isAuthenticatedUser, authorizedRoles("admin"), getAllProducts)
   .post(createProduct);
 router
   .route("/products/:id")

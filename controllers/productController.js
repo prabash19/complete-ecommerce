@@ -4,11 +4,9 @@ const catchAsyncError = require("../middleware/catchAsyncError");
 const ApiFeatures = require("../utils/apiFeatures");
 
 exports.getAllProducts = catchAsyncError(async (req, res) => {
-  const resultsPerPage = 5;
   const apiFeature = new ApiFeatures(Product.find(), req.query)
     .search()
-    .filter()
-    .pagination(resultsPerPage);
+    .filter();
   const product = await apiFeature.query;
   res.status(200).json({
     message: "working",

@@ -1,6 +1,5 @@
 const express = require("express");
 const dotenv = require("dotenv");
-const connectDB = require("./utils/connectDB");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const errorMiddleware = require("./middleware/error");
@@ -20,7 +19,19 @@ const DB = process.env.DATABASE.replace(
   "<PASSWORD>",
   process.env.DATABASE_PASSWORD
 );
+const mongoose = require("mongoose");
+mongoose.set("strictQuery", true);
 connectDB(DB);
+async function connectDB(DB) {
+  try {
+    await mongoose.connect(DB, {
+      useNewUrlParser: true,
+    });
+    console.log("DB connected");
+  } catch (err) {
+    console.log("DB error: ", err);
+  }
+}
 
 app.use("/api/v1", product);
 app.use("/api/v1/user", user);
