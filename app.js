@@ -6,7 +6,7 @@ const errorMiddleware = require("./middleware/error");
 const ErrorHandler = require("./utils/errorHandler");
 const product = require("./routes/productRoute");
 const user = require("./routes/userRoute");
-
+const shop = require("./routes/businessRoute");
 dotenv.config({ path: "./config.env" });
 
 const app = express();
@@ -35,6 +35,7 @@ async function connectDB(DB) {
 
 app.use("/api/v1", product);
 app.use("/api/v1/user", user);
+app.use("/api/v1/shop", shop);
 
 // Error handler for invalid routes
 app.all("*", (req, res, next) => {

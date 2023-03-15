@@ -8,6 +8,7 @@ const {
   resetPasswordHandle,
   hashResetToken,
 } = require("../utils/resetPasswordHandle");
+
 exports.registerUser = catchAsyncError(async (req, res) => {
   const { name, email } = req.body;
   const password = await bcrypt.hash(req.body.password, 10);
@@ -34,7 +35,6 @@ exports.loginUser = catchAsyncError(async (req, res, next) => {
     return next(new ErrorHandler("Please enter email and password", 400));
   }
   const user = await User.findOne({ email }).select("+password");
-  console.log("user is", user);
   if (!user) {
     return next(new ErrorHandler("Invaid email or password", 400));
   }
@@ -94,7 +94,6 @@ exports.forgotPassword = catchAsyncError(async (req, res, next) => {
 });
 
 exports.resetPassword = catchAsyncError(async (req, res, next) => {
-  console.log("req is", req.params.token);
   const resetPasswordToken = hashResetToken(req.params.token);
   const user = await User.findOne({
     resetPasswordToken,
@@ -105,7 +104,7 @@ exports.resetPassword = catchAsyncError(async (req, res, next) => {
       new ErrorHandler("Reset Password token invaild or has been expired", 400)
     );
   }
-  user.password = req.body.password;
+  user.password = await bcrypt.hash(req.body.password, 10);
   user.resetPasswordToken = undefined;
   user.resetPasswordExpire = undefined;
   user.save();
