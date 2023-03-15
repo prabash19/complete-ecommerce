@@ -14,8 +14,8 @@ const router = express.Router();
 
 router
   .route("/products")
-  .get(isAuthenticatedUser, authorizedRoles("admin"), getAllProducts)
-  .post(createProduct);
+  .get(isAuthenticatedUser, authorizedRoles("User"), getAllProducts)
+  .post(isAuthenticatedUser, createProduct);
 router
   .route("/products/:id")
   .patch(updateProduct)
